@@ -86,5 +86,38 @@ contract ('TemakiBar', (accounts) => {
         const balance = await temakiBarInstance.getBalance();
         assert.equal(parseInt(web3.utils.toWei('0.5', 'ether')), balance);
     })
+    it('has tried to withdraw more tokens then balance', async () => {
+        //deposit
+        await temakiBarInstance.deposit({
+            from: accounts[0],
+            value: parseInt(web3.utils.toWei('1', 'ether'))
+        });
+        //get balance in TemakiTokens
+        let temakiTokenBalance = 10000
+        try {
+            await temakiBarInstance.withdraw(temakiTokenBalance,{
+                from: accounts[0]
+            });
+            assert.fail();
+        } catch(err) {
+            assert.ok(err);
+        }
+    })
     //3.Bet function
+    it('did a failed bet', async () => {
+        //deposit
+        await temakiBarInstance.deposit({
+            from: accounts[0],
+            value: parseInt(web3.utils.toWei('1', 'ether'))
+        });
+        const balanceBefore = await temakiTokenInstance.balanceOf(accounts[0]);
+        const betPrice = await temakiBarInstance.betPrice();
+        //try to bet
+        await temakiBarInstance.betTemaki(1, {
+            from: accounts[0]
+        })
+        //check temakiBalance
+        const balanceAfter = await temakiTokenInstance.balanceOf(accounts[0]);
+        assert.equal(balanceAfter, balanceBefore - betPrice);
+    })
 })
