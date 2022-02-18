@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./TemakiToken.sol";
 
 contract TemakiBar is Ownable {
@@ -54,16 +54,15 @@ contract TemakiBar is Ownable {
     //withdraw
     function withdraw(uint256 tokenAmount) public {
         //check if sender has TemakiCoins
-        require(
-            temakiToken.balanceOf(msg.sender) > 0 ||
-                tokenAmount <= temakiToken.balanceOf(msg.sender)
-        );
+        //check if sender has TemakiCoins
+        require(temakiToken.balanceOf(msg.sender) > 0);
+        require(tokenAmount <= temakiToken.balanceOf(msg.sender));
         //get approval
         temakiToken.approve(address(this), tokenAmount);
         //get the ETH from reserve
         uint256 amountEther = tokenAmount * temakiExitPrice;
         //check if reserve has the money to pay out
-        require(reserve > amountEther);
+        require(reserve >= amountEther);
         //send ETH from reserve to seller - !CHECK IF COMPLETED!
         (bool sent, bytes memory data) = payable(msg.sender).call{
             value: amountEther
@@ -74,7 +73,11 @@ contract TemakiBar is Ownable {
         //burn tokens
         temakiToken.burn(msg.sender, tokenAmount);
         //update exit price
-        temakiExitPrice = reserve / temakiToken.totalSupply();
+        if (temakiToken.totalSupply() == 0) {
+            temakiExitPrice = reserve;
+        } else {
+            temakiExitPrice = reserve / temakiToken.totalSupply();
+        }
     }
 
     //bet
@@ -121,5 +124,10 @@ contract TemakiBar is Ownable {
                     )
                 )
             ) % number;
+    }
+
+    //get contract balance
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
     }
 }
