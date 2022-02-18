@@ -2,63 +2,59 @@
 
 pragma solidity ^0.8.0;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC20Capped.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol";
 
-contract TemakiToken is ERC20Capped, Ownable {
-    using SafeMath for uint;
+contract TemakiToken is ERC20, Ownable {
+    using SafeMath for uint256;
 
     string public _name = "TemakiToken";
     string public _symbol = "TMKT";
 
-    constructor() ERC20(_name, _symbol) ERC20Capped(1000000) {
+    constructor() ERC20(_name, _symbol) {}
+
+    event Mint(address indexed sender, uint256 amount);
+    event Burn(address indexed sender, uint256 amount);
+
+    function mint(address buyer, uint256 amount) public onlyOwner {
+        _mint(buyer, amount);
+        emit Mint(buyer, amount);
     }
 
-    event Mint(address indexed sender, uint amount);
-    event Burn(address indexed sender, uint amount);
-
-
-    function mint (uint amount) public onlyOwner {
-        _mint(msg.sender, amount);
-        emit Mint(msg.sender, amount);
+    function burn(address burner, uint256 amount) public {
+        _burn(burner, amount);
+        emit Burn(burner, amount);
     }
-
-    function burn (uint amount) public {
-        _burn(msg.sender, amount);
-        emit Burn(msg.sender, amount);
-    }
-
 }
 
 contract TokenSwap {
-    using SafeMath for uint;
+    using SafeMath for uint256;
 
     //Declare variables
     IERC20 public token1;
     IERC20 public token2;
     address public owner1;
     address public owner2;
-    uint public amount1;
-    uint public amount2;
+    uint256 public amount1;
+    uint256 public amount2;
 
-    constructor (
+    constructor(
         address _owner1,
-        uint _amount1,
+        uint256 _amount1,
         IERC20 _token1,
-
         address _owner2,
-        uint _amount2,
+        uint256 _amount2,
         IERC20 _token2
     ) {
-       //first customer
-       owner1 = _owner1;
-       amount1 = _amount1;
-       token1 = IERC20(_token1);
-       //second customer
-       owner2 = _owner2;
-       amount2 = _amount2;
-       token2 = IERC20(_token2);
+        //first customer
+        owner1 = _owner1;
+        amount1 = _amount1;
+        token1 = IERC20(_token1);
+        //second customer
+        owner2 = _owner2;
+        amount2 = _amount2;
+        token2 = IERC20(_token2);
     }
 
     //create the swap function
@@ -69,7 +65,7 @@ contract TokenSwap {
         require(
             token1.allowance(owner1, address(this)) >= amount1,
             "Token 1 allowance is too low..."
-            );
+        );
         //check the allowance of the second owner
         require(
             token2.allowance(owner2, address(this)) >= amount2,
@@ -81,9 +77,13 @@ contract TokenSwap {
     }
 
     //create the transferFrom function
-    function _safeTransferFrom(IERC20 token, address sender, address recipient, uint amount) private {
+    function _safeTransferFrom(
+        IERC20 token,
+        address sender,
+        address recipient,
+        uint256 amount
+    ) private {
         bool sent = token.transferFrom(sender, recipient, amount);
         require(sent, "Token transfer failed");
     }
-
 }
