@@ -23,6 +23,10 @@ contract TemakiBar is Ownable {
     uint256 public numberPlayers;
     mapping(address => bool) isPlaying;
 
+    //Events
+    event WonBet(address indexed sender, uint256 amount);
+    event LostBet(address indexed sender);
+
     //
     constructor() payable {
         temakiToken = new TemakiToken();
@@ -104,7 +108,7 @@ contract TemakiBar is Ownable {
     }
 
     //bet
-    function betTemaki(uint256 number) public returns (bool) {
+    function betTemaki(uint256 number) public {
         //check if owner has Temaki Balance
         require(
             temakiToken.balanceOf(msg.sender) >= betPrice,
@@ -136,13 +140,13 @@ contract TemakiBar is Ownable {
                 value: prize
             }("");
             require(sent, "Failed to send Ether");
+            emit WonBet(msg.sender, prize);
             //adjust pool
             pool = pool - prize;
             //adjust prize
             prize = pool / 2;
-            return true;
         } else {
-            return false;
+            emit LostBet(msg.sender);
         }
     }
 

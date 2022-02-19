@@ -35,6 +35,9 @@ contract ('TemakiBar', (accounts) => {
         const pool = await temakiBarInstance.pool()
         //check reserve and pool
         assert.ok((reserve / pool) == 1)
+        //check vars
+        const players = await temakiBarInstance.numberPlayers();
+        assert.equal(parseInt(players), 1)
     })
     it('has received the Temaki Token', async () => {
         //make deposit
@@ -77,7 +80,7 @@ contract ('TemakiBar', (accounts) => {
         }
         //get balance again
         temakiTokenBalance = await temakiTokenInstance.balanceOf(accounts[0]);
-        //check balance is equal to 0
+        //check vars
         assert.equal(parseInt(temakiTokenBalance), 0)
         const temakiTokenSupply = await temakiTokenInstance.totalSupply();
         assert.equal(parseInt(temakiTokenSupply),0);
@@ -85,6 +88,8 @@ contract ('TemakiBar', (accounts) => {
         assert.equal(parseInt(reserve),0);
         const balance = await temakiBarInstance.getBalance();
         assert.equal(parseInt(web3.utils.toWei('0.5', 'ether')), balance);
+        const players = await temakiBarInstance.numberPlayers();
+        assert.equal(parseInt(players), 0)
     })
     it('has tried to withdraw more tokens then balance', async () => {
         //deposit
@@ -113,11 +118,12 @@ contract ('TemakiBar', (accounts) => {
         const balanceBefore = await temakiTokenInstance.balanceOf(accounts[0]);
         const betPrice = await temakiBarInstance.betPrice();
         //try to bet
-        await temakiBarInstance.betTemaki(1, {
+        const {logs} = await temakiBarInstance.betTemaki(1, {
             from: accounts[0]
         })
         //check temakiBalance
         const balanceAfter = await temakiTokenInstance.balanceOf(accounts[0]);
         assert.equal(balanceAfter, balanceBefore - betPrice);
+        assert.equal(logs[0].event, 'LostBet');
     })
 })
