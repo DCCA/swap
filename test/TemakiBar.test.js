@@ -42,13 +42,13 @@ contract ('TemakiBar', (accounts) => {
     it('has received the Temaki Token', async () => {
         //make deposit
         await temakiBarInstance.deposit({
-            from: accounts[1],
+            from: accounts[0],
             value: parseInt(web3.utils.toWei('1', 'ether')),
         });
         //check balance
-        const temakiTokenBalance = await temakiTokenInstance.balanceOf(accounts[1]);
+        const temakiTokenBalance = await temakiTokenInstance.balanceOf(accounts[0]);
         //check received tokens is correct
-        assert.equal(temakiTokenBalance, '500');
+        assert.equal(temakiTokenBalance, parseInt(web3.utils.toWei('500', 'ether')));
     })
     it('has send invalid value to deposit', async () => {
         try {
@@ -84,10 +84,10 @@ contract ('TemakiBar', (accounts) => {
         assert.equal(parseInt(temakiTokenBalance), 0)
         const temakiTokenSupply = await temakiTokenInstance.totalSupply();
         assert.equal(parseInt(temakiTokenSupply),0);
-        const reserve = await temakiBarInstance.reserve();
-        assert.equal(parseInt(reserve),0);
-        const balance = await temakiBarInstance.getBalance();
-        assert.equal(parseInt(web3.utils.toWei('0.5', 'ether')), balance);
+        const reserveEther = await temakiBarInstance.reserve();
+        assert.equal(parseInt(reserveEther),0);
+        const balanceEther = await temakiBarInstance.getBalance();
+        assert.equal(parseInt(web3.utils.toWei('0.5', 'ether')), balanceEther);
         const players = await temakiBarInstance.numberPlayers();
         assert.equal(parseInt(players), 0)
     })
@@ -98,7 +98,7 @@ contract ('TemakiBar', (accounts) => {
             value: parseInt(web3.utils.toWei('1', 'ether'))
         });
         //get balance in TemakiTokens
-        let temakiTokenBalance = 10000
+        let temakiTokenBalance = web3.utils.toWei('1000', 'ether');
         try {
             await temakiBarInstance.withdraw(temakiTokenBalance,{
                 from: accounts[0]

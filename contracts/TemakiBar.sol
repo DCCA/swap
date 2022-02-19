@@ -15,7 +15,7 @@ contract TemakiBar is Ownable {
     uint256 public prize;
     uint256 public reservePoolRatio = 2;
     uint256 public temakiEntryPrice = 1000000000000000;
-    uint256 public betPrice = 10;
+    uint256 public betPrice = 10000000000000000000;
     uint256 public betDifficulty = 1000;
     uint256 public temakiExitPrice;
     TemakiToken public temakiToken;
@@ -60,7 +60,7 @@ contract TemakiBar is Ownable {
         //Mint the tokens and send to buyer
         temakiToken.mint(msg.sender, amountTokens);
         //set new exit price
-        temakiExitPrice = reserve / temakiToken.totalSupply();
+        temakiExitPrice = temakiToken.totalSupply() / reserve;
         //count as a new player
         if (isPlaying[msg.sender] == false) {
             numberPlayers++;
@@ -82,7 +82,7 @@ contract TemakiBar is Ownable {
         //get approval
         temakiToken.approve(address(this), tokenAmount);
         //get the ETH from reserve
-        uint256 amountEther = tokenAmount * temakiExitPrice;
+        uint256 amountEther = tokenAmount / temakiExitPrice;
         //check if reserve has the money to pay out
         require(reserve >= amountEther);
         //send ETH from reserve to seller - !CHECK IF COMPLETED!
@@ -98,7 +98,7 @@ contract TemakiBar is Ownable {
         if (temakiToken.totalSupply() == 0) {
             temakiExitPrice = reserve;
         } else {
-            temakiExitPrice = reserve / temakiToken.totalSupply();
+            temakiExitPrice = temakiToken.totalSupply() / reserve;
         }
         //update players numbers
         if (temakiToken.balanceOf(msg.sender) == 0) {
@@ -108,7 +108,7 @@ contract TemakiBar is Ownable {
     }
 
     //bet
-    function betTemaki(uint256 number) public {
+    function betTemaki(uint256 number) public returns (bool) {
         //check if owner has Temaki Balance
         require(
             temakiToken.balanceOf(msg.sender) >= betPrice,
@@ -129,7 +129,7 @@ contract TemakiBar is Ownable {
         if (temakiToken.totalSupply() == 0) {
             temakiExitPrice = reserve;
         } else {
-            temakiExitPrice = reserve / temakiToken.totalSupply();
+            temakiExitPrice = temakiToken.totalSupply() / reserve;
         }
         //check if winner
         if (lotteryTicket == number) {
