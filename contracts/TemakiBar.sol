@@ -20,8 +20,8 @@ contract TemakiBar is Ownable {
     uint256 public temakiExitPrice;
     TemakiToken public temakiToken;
     address public temakiBarAddress;
-    bytes4 private constant SELECTOR =
-        bytes4(keccak256(bytes("transfer(address,uint256)")));
+    uint256 public numberPlayers;
+    mapping(address => bool) isPlaying;
 
     //
     constructor() payable {
@@ -29,10 +29,18 @@ contract TemakiBar is Ownable {
         temakiBarAddress = address(this);
     }
 
+    //balance
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
     //deposit
     function deposit() public payable {
         //check value
-        require(msg.value >= temakiEntryPrice);
+        require(
+            msg.value >= (temakiEntryPrice * reservePoolRatio),
+            "Not enough Ether"
+        );
         //variables
         uint256 value = msg.value;
         //send ETH to Reserve and to Pool
@@ -49,14 +57,24 @@ contract TemakiBar is Ownable {
         temakiToken.mint(msg.sender, amountTokens);
         //set new exit price
         temakiExitPrice = reserve / temakiToken.totalSupply();
+        //count as a new player
+        if (isPlaying[msg.sender] == false) {
+            numberPlayers++;
+            isPlaying[msg.sender] = true;
+        }
     }
 
     //withdraw
     function withdraw(uint256 tokenAmount) public {
         //check if sender has TemakiCoins
-        //check if sender has TemakiCoins
-        require(temakiToken.balanceOf(msg.sender) > 0);
-        require(tokenAmount <= temakiToken.balanceOf(msg.sender));
+        require(
+            temakiToken.balanceOf(msg.sender) > 0,
+            "Not enough Temaki Tokens"
+        );
+        require(
+            tokenAmount <= temakiToken.balanceOf(msg.sender),
+            "You don't have that much of Temaki Tokens"
+        );
         //get approval
         temakiToken.approve(address(this), tokenAmount);
         //get the ETH from reserve
@@ -78,20 +96,37 @@ contract TemakiBar is Ownable {
         } else {
             temakiExitPrice = reserve / temakiToken.totalSupply();
         }
+        //update players numbers
+        if (temakiToken.balanceOf(msg.sender) == 0) {
+            numberPlayers--;
+            isPlaying[msg.sender] = false;
+        }
     }
 
     //bet
     function betTemaki(uint256 number) public returns (bool) {
         //check if owner has Temaki Balance
-        require(temakiToken.balanceOf(msg.sender) >= betPrice);
+        require(
+            temakiToken.balanceOf(msg.sender) >= betPrice,
+            "Not enough Temaki Tokens to bet"
+        );
         //get approval
         temakiToken.approve(address(this), betPrice);
         //burn betted tokens
         temakiToken.burn(msg.sender, betPrice);
+        //update players numbers
+        if (temakiToken.balanceOf(msg.sender) == 0) {
+            numberPlayers--;
+            isPlaying[msg.sender] = false;
+        }
         //roll bet
         uint256 lotteryTicket = random(betDifficulty);
         //adjust exitPrice
-        temakiExitPrice = reserve / temakiToken.totalSupply();
+        if (temakiToken.totalSupply() == 0) {
+            temakiExitPrice = reserve;
+        } else {
+            temakiExitPrice = reserve / temakiToken.totalSupply();
+        }
         //check if winner
         if (lotteryTicket == number) {
             //winner
@@ -124,10 +159,5 @@ contract TemakiBar is Ownable {
                     )
                 )
             ) % number;
-    }
-
-    //get contract balance
-    function getBalance() public view returns (uint256) {
-        return address(this).balance;
     }
 }
