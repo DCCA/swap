@@ -1,8 +1,9 @@
 import Web3 from "web3";
-import { api } from "../keys";
      
 let web3;
- 
+
+const api = process.env.API_KEY;
+
 if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
   // We are in the browser and metamask is running.
   window.ethereum.request({ method: "eth_requestAccounts" });

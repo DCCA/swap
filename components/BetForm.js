@@ -39,10 +39,12 @@ const BetForm = (props) => {
                     from: account,
                     })
             if(betResult.events.WonBet){
-                setLostBetResult(messages.won);
+                setWonBetResult(messages.won);
                 updatePrize();
+                console.log('won')
             } else {
-                setWonBetResult(messages.lost);
+                setLostBetResult(messages.lost);
+                console.log('lost')
             }
             await updateBalance();
             setValue('')
@@ -79,7 +81,7 @@ const BetForm = (props) => {
             return (
                 <Alert severity="success" sx={{marginTop: '.5rem'}}>
                     <AlertTitle>
-                        Not this...
+                        You won!!
                     </AlertTitle>
                     {wonBetResult}
                 </Alert>
