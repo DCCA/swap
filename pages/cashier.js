@@ -1,11 +1,12 @@
 import '@fontsource/roboto';
-import {Typography } from '@mui/material';
+import { Typography, Box, SvgIcon, Divider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import TemakiTokenInstance from '../interfaces/temakiToken';
 import BuyForm from '../components/BuyForm';
 import SellForm from '../components/SellForm';
 import web3 from '../interfaces/web3';
+import VendingMachine from '../assets/vending-machine.svg';
 
 function Cashier() {
   const [balance, setBalance] = useState();
@@ -31,15 +32,30 @@ function Cashier() {
     }
   }
 
+  const boxStylesFlex = {
+    display: 'flex', 
+    flexDirection:'column', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    margin: '1.5rem 0 0'
+  }
+
   return (
     <Layout>
-      <Typography variant='h4'>
-        Cashier
-      </Typography>
-      <Typography>
-        Your balance: {balance} Temaki's
-      </Typography>
+      <Box sx={boxStylesFlex}>
+        <SvgIcon component={VendingMachine} color='primary' inheritViewBox='true' sx={{fontSize: '6rem', textAlign: 'center'}}/>
+        <Typography variant='h4' color='primary' margin='normal'>
+          Cashier
+        </Typography>
+      </Box>
+      <Box sx={boxStylesFlex}>
+        <Typography>
+        You have: <Typography component='span' color='primary' sx={{fontWeight: '600'}}>{balance} Temaki's</Typography>    
+        </Typography>
+      </Box>
+      <Divider sx={{margin: '1rem 0'}}/>
       <BuyForm account={account} balance={balance} updateBalance={getBalance}/>
+      <Divider sx={{margin: '1rem 0'}}/>
       <SellForm account={account} balance={balance} updateBalance={getBalance}/>
     </Layout>
   ) 

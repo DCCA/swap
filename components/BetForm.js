@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {Typography, TextField, Alert, AlertTitle, FormGroup} from '@mui/material';
 import {LoadingButton} from '@mui/lab';
 import TemakiBarInstance from "../interfaces/temakiBar";
-import web3 from "../interfaces/web3";
 
 const BetForm = (props) => {
     //get props from parent
@@ -28,8 +27,12 @@ const BetForm = (props) => {
         setErrorMessage('')
         setLoading(true);
         setLostBetResult('');
+        //check if number between 0 - 999
         //try to interact with contracts
         try {
+            if(value < 0 || value > 999){
+                throw new Error('The number is not valid')
+            }
             const betResult = await TemakiBarInstance.methods
                 .betTemaki(value)
                 .send({

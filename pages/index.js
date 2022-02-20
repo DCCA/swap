@@ -38,7 +38,7 @@ function HomePage() {
     flexDirection:'column', 
     justifyContent: 'center', 
     alignItems: 'center', 
-    margin: '3rem 0'
+    margin: '1rem 0 1rem'
   }
 
   const boxStylesFlexQuestion = {
@@ -52,8 +52,8 @@ function HomePage() {
   return (
     <Layout>
       <Box sx={boxStylesFlex}>
-        <SvgIcon component={TemakiIcon} color='primary' inheritViewBox='true' sx={{fontSize: '10rem', textAlign: 'center'}}/>
-        <Typography variant='h4' color='primary'>
+        <SvgIcon component={TemakiIcon} color='primary' inheritViewBox='true' sx={{fontSize: '8rem', textAlign: 'center'}}/>
+        <Typography variant='h4' color='primary' sx={{textAlign: 'center'}}>
           Welcome to the Temaki bar!
         </Typography>
       </Box>
@@ -63,19 +63,19 @@ function HomePage() {
         </Typography>
       </Box>
       <CardData 
-        data={web3.utils.fromWei(temakiTokenPrize, 'ether') + ' ETH'} 
+        data={web3.utils.fromWei(temakiTokenPrize, 'ether')} 
         description='$temaki.token.price'
         action='/buy.temaki.tokens'
         href='/cashier'
       />
       <CardData 
-        data={web3.utils.fromWei(prizePool, 'ether') + ' ETH'} 
+        data={web3.utils.fromWei(prizePool, 'ether')} 
         description='$lottery.prize'
         action='/bet.now'
         href='/bet'
       />
       <CardData 
-        data={web3.utils.fromWei(reserveTotal, 'ether') + ' ETH'} 
+        data={web3.utils.fromWei(reserveTotal, 'ether')} 
         description='$ether.locked'
         action='/sell.temaki.tokens'
         href='/cashier'

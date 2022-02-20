@@ -5,17 +5,18 @@ import TemakiBarInstance from "../interfaces/temakiBar";
 import web3 from "../interfaces/web3";
 
 const BuyForm = (props) => {
+    const {account, balance, updateBalance} = props;
+
     const [value, setValue] = useState();
     const [temakiTokenPrice, setTemakiTokenPrice] = useState();
-    const [etherEstimated, setEthersEstimated] = useState();
-    const {account, balance, updateBalance} = props;
+    const [etherEstimated, setEthersEstimated] = useState(0);
     const [isLoading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('')
 
 
     useEffect(() => {
         getTemakiTokenPrice();
-    },[etherEstimated, balance])
+    },[etherEstimated, balance, value])
 
     const getTemakiTokenPrice = async () => {
         const result = await TemakiBarInstance.methods.temakiExitPrice().call();
@@ -43,8 +44,10 @@ const BuyForm = (props) => {
       }
 
     const onChangeHanddler = (e) => {
+        setErrorMessage('')
         setValue(e.target.value);
-        let estimated = (e.target.value / temakiTokenPrice);
+        // TODO - REMOVE THE MULT BY 10
+        let estimated = (e.target.value / (temakiTokenPrice));
         setEthersEstimated(estimated);
     }
 
@@ -65,7 +68,7 @@ const BuyForm = (props) => {
     return (
         <form onSubmit={onSubmitHanddler}>
             <FormGroup margin='normal' >
-                <Typography>
+                <Typography variant="h6">
                     Sell some Temakis!
                 </Typography>
                 <TextField 

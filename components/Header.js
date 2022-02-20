@@ -5,12 +5,15 @@ import Link from "next/link";
 import TemakiIcon from '../assets/temaki-icon.svg';
 
 const Header = () => {
+    const removePadding = {
+        paddingRight: '0'
+    }
 
     return (
         <AppBar position="static" color="primary">
-            <Container maxWidth="xl" sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Container maxWidth="sm" sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Link href={`/`} style={{justifySelf: 'start'}}>
-                    <MenuItem>
+                    <MenuItem sx={{paddingLeft: '0'}}>
                         <SvgIcon component={TemakiIcon} inheritViewBox/>
                         <Typography>
                             temakiBar
@@ -19,13 +22,13 @@ const Header = () => {
                 </Link>
                 <Box sx={{display: 'flex'}}>
                     <Link href={`/cashier`}>
-                        <MenuItem>
-                            /cashier
+                        <MenuItem sx={removePadding}>
+                            .cashier
                         </MenuItem>
                     </Link>
                     <Link href={`/bet`}>
-                        <MenuItem>
-                            /bar
+                        <MenuItem sx={removePadding}>
+                            .bar
                         </MenuItem>
                     </Link>
                 </Box>

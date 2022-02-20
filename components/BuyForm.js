@@ -7,7 +7,7 @@ import web3 from "../interfaces/web3";
 const BuyForm = (props) => {
     const [value, setValue] = useState();
     const [temakiTokenPrice, setTemakiTokenPrice] = useState();
-    const [ethersNeeded, setEthersNeeded] = useState();
+    const [ethersNeeded, setEthersNeeded] = useState(0);
     const {account, balance, updateBalance} = props;
     const [isLoading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('')
@@ -68,7 +68,7 @@ const BuyForm = (props) => {
     return (
         <form onSubmit={onSubmitHanddler}>
             <FormGroup margin='normal' >
-                <Typography>
+                <Typography variant="h6">
                     Buy some Temakis!
                 </Typography>
                 <TextField 
