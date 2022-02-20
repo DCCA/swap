@@ -3,7 +3,7 @@ import TemakiBar from '../build/contracts/TemakiBar.json';
 
 const TemakiBarInstance = new web3.eth.Contract(
     TemakiBar.abi,
-    '0xBDc653196195bA3Aa1dd2A97CFb001fC5c20fDbD'
+    '0x752E0d9d2Ed1A4CAeceaafB06a04BD29b816eA16'
 )
 
 export default TemakiBarInstance;

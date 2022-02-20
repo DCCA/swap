@@ -108,7 +108,7 @@ contract TemakiBar is Ownable {
     }
 
     //bet
-    function betTemaki(uint256 number) public returns (bool) {
+    function betTemaki(uint256 number) public {
         //check if owner has Temaki Balance
         require(
             temakiToken.balanceOf(msg.sender) >= betPrice,

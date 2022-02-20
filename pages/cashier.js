@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import TemakiTokenInstance from '../interfaces/temakiToken';
 import BuyForm from '../components/BuyForm';
+import SellForm from '../components/SellForm';
+import web3 from '../interfaces/web3';
 
 function Cashier() {
   const [balance, setBalance] = useState();
@@ -12,7 +14,7 @@ function Cashier() {
   useEffect(() => {
     getAccounts();
     getBalance();
-  },[account])
+  },[account, balance])
 
   const getAccounts = async () => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -23,7 +25,8 @@ function Cashier() {
 
   const getBalance = async () => {
     if(account){
-      const freshBalance = await TemakiTokenInstance.methods.balanceOf(account).call();
+      let freshBalance = await TemakiTokenInstance.methods.balanceOf(account).call();
+      freshBalance = web3.utils.fromWei(freshBalance, 'ether');
       setBalance(freshBalance);
     }
   }
@@ -34,7 +37,8 @@ function Cashier() {
       <Typography>
         Your balance: {balance} Temaki's
       </Typography>
-      <BuyForm account={account}/>
+      <BuyForm account={account} balance={balance}/>
+      <SellForm account={account} balance={balance}/>
     </Layout>
   ) 
 }
