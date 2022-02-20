@@ -11,7 +11,7 @@ const CardData = (props) => {
     }
 
     return (
-        <Card raised='true' sx={{marginBottom: '1rem', display: 'flex', justifyContent: 'center', textAlign: 'center', bgcolor: 'secondary.dark'}}>
+        <Card raised='true' sx={{marginBottom: '1rem', display: 'flex', justifyContent: 'center', textAlign: 'center', bgcolor: 'secondary.dark', overflow: 'visible'}}>
             <CardContent>
                 <Typography sx={{fontSize: '2.25rem', fontWeight: '600', lineHeight: '2.25rem', color: 'white'}}>
                     {roundNumbers(data)}

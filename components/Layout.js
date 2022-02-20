@@ -50,7 +50,7 @@ function Layout(props) {
             <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
           </Head>
           <Header/>
-          <Container maxWidth="sm" sx={{display: 'flex', flexDirection: 'column', bgcolor: 'secondary.light', height: '100vh'}}>
+          <Container maxWidth="sm" sx={{display: 'flex', flexDirection: 'column', bgcolor: 'secondary.light', minHeight: '100vh'}}>
               {props.children}
           </Container>
         </CssBaseline>

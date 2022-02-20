@@ -5,9 +5,6 @@ import Link from "next/link";
 import TemakiIcon from '../assets/temaki-icon.svg';
 
 const Header = () => {
-    const removePadding = {
-        paddingRight: '0'
-    }
 
     return (
         <AppBar position="static" color="primary">
@@ -22,12 +19,12 @@ const Header = () => {
                 </Link>
                 <Box sx={{display: 'flex'}}>
                     <Link href={`/cashier`}>
-                        <MenuItem sx={removePadding}>
+                        <MenuItem>
                             .cashier
                         </MenuItem>
                     </Link>
                     <Link href={`/bet`}>
-                        <MenuItem sx={removePadding}>
+                        <MenuItem>
                             .bar
                         </MenuItem>
                     </Link>
