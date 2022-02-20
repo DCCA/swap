@@ -37,8 +37,8 @@ function Cashier() {
       <Typography>
         Your balance: {balance} Temaki's
       </Typography>
-      <BuyForm account={account} balance={balance}/>
-      <SellForm account={account} balance={balance}/>
+      <BuyForm account={account} balance={balance} updateBalance={getBalance}/>
+      <SellForm account={account} balance={balance} updateBalance={getBalance}/>
     </Layout>
   ) 
 }
