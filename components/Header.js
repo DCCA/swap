@@ -1,7 +1,8 @@
 import { react } from "@babel/types";
-import { AppBar, Button, Container, MenuItem, Typography } from '@mui/material';
-import { Box } from "@mui/system";
+import { AppBar, Button, Container, MenuItem, SvgIcon, Typography } from '@mui/material';
+import { Box, typography } from "@mui/system";
 import Link from "next/link";
+import TemakiIcon from '../assets/temaki-icon.svg';
 
 const Header = () => {
 
@@ -10,18 +11,21 @@ const Header = () => {
             <Container maxWidth="xl" sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Link href={`/`} style={{justifySelf: 'start'}}>
                     <MenuItem>
-                        /temakiBar
+                        <SvgIcon component={TemakiIcon} inheritViewBox/>
+                        <Typography>
+                            temakiBar
+                        </Typography>
                     </MenuItem>
                 </Link>
                 <Box sx={{display: 'flex'}}>
                     <Link href={`/cashier`}>
                         <MenuItem>
-                            Cashier
+                            /cashier
                         </MenuItem>
                     </Link>
                     <Link href={`/bet`}>
                         <MenuItem>
-                            Bet
+                            /bar
                         </MenuItem>
                     </Link>
                 </Box>

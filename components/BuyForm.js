@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {FormControl, Typography, TextField, Alert, AlertTitle} from '@mui/material';
+import {Typography, TextField, Alert, AlertTitle, FormGroup} from '@mui/material';
 import {LoadingButton} from '@mui/lab';
 import TemakiBarInstance from "../interfaces/temakiBar";
 import web3 from "../interfaces/web3";
@@ -67,7 +67,7 @@ const BuyForm = (props) => {
 
     return (
         <form onSubmit={onSubmitHanddler}>
-            <FormControl fullWidth margin='normal' >
+            <FormGroup margin='normal' >
                 <Typography>
                     Buy some Temakis!
                 </Typography>
@@ -90,7 +90,7 @@ const BuyForm = (props) => {
                     >
                     /$buy.temakis
                 </LoadingButton>
-            </FormControl>
+            </FormGroup>
         </form>
     )
 }

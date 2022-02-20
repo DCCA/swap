@@ -1,10 +1,10 @@
-import '@fontsource/roboto';
-import { Button, ButtonGroup, Card, CardContent, Container, Typography } from '@mui/material';
+import { Typography, SvgIcon, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import TemakiBarInstance from '../interfaces/temakiBar';
 import web3 from '../interfaces/web3';
 import CardData from '../components/CardData';
+import TemakiIcon from '../assets/temaki-icon.svg';
 
 function HomePage() {
   const [prizePool, setPrizePool] = useState('');
@@ -32,10 +32,36 @@ function HomePage() {
     setTemakiTokenPrice(price);
   }
 
+  // TODO - REMOVE DUPLICATED CODES!!
+  const boxStylesFlex = {
+    display: 'flex', 
+    flexDirection:'column', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    margin: '3rem 0'
+  }
+
+  const boxStylesFlexQuestion = {
+    display: 'flex', 
+    flexDirection:'column', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    margin: '0 0 1rem'
+  }
+
   return (
     <Layout>
-      <h3>Welcome to Temaki bar!</h3>
-      <p>What would like to order today?</p>
+      <Box sx={boxStylesFlex}>
+        <SvgIcon component={TemakiIcon} color='primary' inheritViewBox='true' sx={{fontSize: '10rem', textAlign: 'center'}}/>
+        <Typography variant='h4' color='primary'>
+          Welcome to the Temaki bar!
+        </Typography>
+      </Box>
+      <Box sx={boxStylesFlexQuestion}>
+        <Typography>
+        What would like to order today?
+        </Typography>
+      </Box>
       <CardData 
         data={web3.utils.fromWei(temakiTokenPrize, 'ether') + ' ETH'} 
         description='$temaki.token.price'

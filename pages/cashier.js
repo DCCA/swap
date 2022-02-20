@@ -33,7 +33,9 @@ function Cashier() {
 
   return (
     <Layout>
-      <h3>Cashier</h3>
+      <Typography variant='h4'>
+        Cashier
+      </Typography>
       <Typography>
         Your balance: {balance} Temaki's
       </Typography>
