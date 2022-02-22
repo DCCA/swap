@@ -23,3 +23,9 @@ The app was built using Truffle for the Smart Contracts and React with NextJS fo
 
 ##### Test-net
 To try this app you will need to install MetaMask and set your network to the Rinkeby test-net. <br/> If you need some tokens, you can get at the following link [ChainLink Faucet - Rinkeby](https://faucets.chain.link/rinkeby)
+
+##### To Do's
+1. Improve the RandomNumGen using a ChainLink contract
+2. Improve the Pool / Prize ratio for a better return on the lottery
+3. Implement a staking reward for Temaki Tokens based on Fees per transaction
+4. Implement a Governance contract in the TemakiBar
